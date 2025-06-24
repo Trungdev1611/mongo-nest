@@ -25,6 +25,11 @@ export class UserController {
     return this.userService.findAll();
   }
 
+    @Get(`custom_repo`)
+  async findAllCustomRepo() {
+    return await this.userService.findAll();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.userService.findOne(id);

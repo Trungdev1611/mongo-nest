@@ -5,10 +5,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/schemas/User.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private userRepo: UserRepository
+  ) {
 
   }
   create(createDto: CreateUserDto) {
@@ -16,8 +20,8 @@ export class UserService {
     return userCreated.save()
   }
 
-  findAll() {
-    return this.userModel.find().exec();
+  async findAll() {
+    return await this.userModel.find().exec();
   }
 
   async findOne(id: string) {
@@ -32,6 +36,10 @@ export class UserService {
       
     }
   
+  }
+
+  async findAllCustomModel() {
+    return this.userRepo.findAll()
   }
 
   // update(id: number, updateDto: UpdateDto) {

@@ -14,3 +14,4 @@ export class User {
 }
 
 export const UserSchema =  SchemaFactory.createForClass(User) //tạo user collection trong db
+export type UserDocument = User & Document;
