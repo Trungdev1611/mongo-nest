@@ -23,7 +23,7 @@ export class UserRepository {
   }
 
   async update(id: string, data: Partial<User>): Promise<User | null> {
-    return this.model.findByIdAndUpdate(id, data, { new: true }).exec();
+    return this.model.findByIdAndUpdate(id, data, { new: true }).exec(); //new: true sẽ trả về object trước khi update, false sẽ trả về object sau update
   }
 
   async delete(id: string): Promise<User | null> {
