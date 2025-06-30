@@ -6,7 +6,8 @@ import { User } from 'src/schemas/User.schema';
 import { isValidObjectId, Model } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserRepository } from './user.repository';
-import { UpdateDto } from './dto/UpdateUser.dto';
+import { UpdateDto } from './dto/updateUser.dto';
+import { QueryFilterUserDTO } from './dto/QueryFilterUser.dto';
 
 @Injectable()
 export class UserService {
@@ -66,5 +67,15 @@ export class UserService {
       throw new BadRequestException(error)
     }
    
+  }
+
+  async findAndPaginate(dto: QueryFilterUserDTO) {
+    const filter = {
+      ...dto.filter,
+      ...(dto.username && {
+        username: { $regex: dto.username, $options: 'i' }
+      })
+    }
+    return this.userRepo.findAllAndPaginate({...dto, filter})
   }
 }

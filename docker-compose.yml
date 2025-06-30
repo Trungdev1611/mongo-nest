@@ -1,12 +1,28 @@
-version: '3.8'
 services:
   mongodb:
-    image: mongo
+    image: mongo:6
     container_name: mongodb
     ports:
       - '27017:27017'
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     volumes:
       - mongo-data:/data/db
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: nestjs-backend
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/app  # ✅ mount toàn bộ code vào container
+      - /app/node_modules  # ✅ tránh ghi đè node_modules host lên
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/nest?replicaSet=rs0
+    command: npm run start:dev
 
 volumes:
   mongo-data:

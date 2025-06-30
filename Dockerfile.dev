@@ -1,0 +1,16 @@
+# Dockerfile.dev
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files và cài trước (tối ưu cache)
+COPY package*.json ./
+RUN npm install
+
+# Copy toàn bộ code vào container
+COPY . .
+
+# Expose Nest port (bạn đang dùng 3001)
+EXPOSE 3001
+
+CMD ["npm", "run", "start:dev"]
